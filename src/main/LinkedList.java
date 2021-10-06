@@ -23,41 +23,24 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     }
     @Override
     public TElement get(int index) {
-        var iter = iterator();
-        TElement res = null;
-        for (int i = 0; i != index; ++i)
-        {
-            if (!iter.hasNext())
-                throw new IndexOutOfBoundsException();
-            res = iter.next();
-        }
-        return res;
+        var iter = (LinkedListIterator) listIterator(index);
+        return iter.currentNode.data;
     }
     ListNode getNode(int index)
     {
-        var iter = iterator();
-        for (int i = 0; i != index; ++i)
-        {
-            if (!iter.hasNext())
-                throw new IndexOutOfBoundsException();
-            iter.next();
-        }
+        var iter = (LinkedListIterator) listIterator(index);
         return iter.last;
     }
     public boolean add(TElement e)
     {
-        var iter = iterator();
-        for (var i = 0; i < size(); ++i)
-            iter.next();
+        var iter = (LinkedListIterator) listIterator(size());
         iter.add(e);
         return true;
     }
     @Override
     public void add(int index, TElement e)
     {
-        var iter = iterator();
-        for (var i = 0; i < index; ++i)
-            iter.next();
+        var iter = (LinkedListIterator) listIterator(index);
         iter.add(e);
     }
     @Override
@@ -74,10 +57,8 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     {
         if (index > size())
             throw new IndexOutOfBoundsException("Max Index: " + (size()-1) + " Index: " + index);
-        var iter = iterator();
+        var iter = (LinkedListIterator) listIterator(index);
         iter.next();
-        for (int i = 0; i < index; ++i)
-            iter.next();
         var lastElement = iter.last.data;
         iter.remove();
         return lastElement;
@@ -108,6 +89,60 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         }
         sb.append("]");
         return sb.toString();
+    }
+    @Override
+    public void clear()
+    {
+        head = null;
+    }
+    @Override
+    public int indexOf(Object o) {
+        var i = 0;
+        for (var e : this)
+        {
+            if (e.equals(o))
+                return i;
+            ++i;
+        }
+        return -1;
+    }
+    @Override
+    public int lastIndexOf(Object o) {
+        var i = 0;
+        var obji = -1;
+        for (var e : this)
+        {
+            if (e.equals(o))
+                obji = i;
+            ++i;
+        }
+        return obji;
+    }
+    @Override
+    public ListIterator<TElement> listIterator() {
+        return new LinkedListIterator();
+    }
+    @Override
+    public ListIterator<TElement> listIterator(int index) {
+        var iter = iterator();
+        for (int i = 0; i != index; ++i)
+        {
+            if (!iter.hasNext())
+                throw new IndexOutOfBoundsException();
+            iter.next();
+        }
+        return iter;
+    }
+    @Override
+    protected void removeRange(int fromIndex, int toIndex) {
+        if (toIndex > size())
+            throw new IndexOutOfBoundsException();
+        var iter = listIterator(fromIndex);
+        for (var i = fromIndex; i < toIndex; ++i)
+        {
+            iter.remove();
+            iter.next();
+        }
     }
     public class ListNode
     {

@@ -11,5 +11,6 @@ public class App
         ll.add(4);
         ll.add(5);
         System.out.println(ll);
+        System.out.println(ll.get(1));
     }
 }
