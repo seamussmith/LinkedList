@@ -1,6 +1,7 @@
 package main;
 
 import java.util.AbstractList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.lang.UnsupportedOperationException;
@@ -15,6 +16,10 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     public LinkedList()
     {
         
+    }
+    public LinkedList(List<TElement> elements)
+    {
+        elements.forEach(x -> add(x));
     }
     @Override
     public TElement get(int index) {
@@ -39,6 +44,32 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         }
         return iter.last;
     }
+    public boolean add(TElement e)
+    {
+        var iter = iterator();
+        ListNode finalNode = null;
+        while (iter.hasNext())
+        {
+            iter.next();
+            finalNode = iter.last;
+        }
+        if (finalNode == null)
+        {
+            finalNode = new ListNode(e, null);
+            this.head = finalNode;
+            return true;
+        }
+        finalNode.next = new ListNode(e, null);
+        return true;
+    }
+    @Override
+    public void add(int index, TElement e)
+    {
+        var iter = iterator();
+        for (var i = 0; i < index; ++i)
+            iter.next();
+        iter.add(e);
+    }
     @Override
     public LinkedListIterator iterator()
     {
@@ -50,6 +81,21 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         for (var i : this)
             ++s;
         return s;
+    }
+    public String toString()
+    {
+        var sb = new StringBuilder();
+        var iter = iterator();
+        sb.append("[");
+        while (iter.hasNext())
+        {
+            var next = iter.next();
+            sb.append(next);
+            if (iter.hasNext())
+                sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
     public class ListNode
     {
@@ -71,7 +117,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         ListNode last = null;
         boolean canRemove = false;
         int index = 0;
-        public LinkedListIterator()
+        private LinkedListIterator()
         {
             
         }
@@ -124,9 +170,14 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         @Override
         public void add(TElement e) {
             // If we are operating without a head
-            if (currentNode == LinkedList.this.head)
+            if (currentNode == null)
             {
                 LinkedList.this.head = new ListNode(e, null);
+                return;
+            }
+            else if (currentNode == LinkedList.this.head)
+            {
+                LinkedList.this.head = new ListNode(e, currentNode);
                 return;
             }
             var cur = last;
@@ -134,6 +185,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
             var newNode = new ListNode(e, nextNode);
             cur.next = newNode;
         }
+        // Going backwards in a linked list is an impossible task.
         @Override
         public boolean hasPrevious() {
             throw new UnsupportedOperationException("LinkedList does not support moving backwards");
