@@ -21,14 +21,22 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         var iter = iterator();
         TElement res = null;
         for (int i = 0; i != index; ++i)
+        {
+            if (!iter.hasNext())
+                throw new IndexOutOfBoundsException();
             res = iter.next();
+        }
         return res;
     }
     ListNode getNode(int index)
     {
         var iter = iterator();
         for (int i = 0; i != index; ++i)
+        {
+            if (!iter.hasNext())
+                throw new IndexOutOfBoundsException();
             iter.next();
+        }
         return iter.last;
     }
     @Override
