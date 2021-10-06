@@ -47,19 +47,9 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     public boolean add(TElement e)
     {
         var iter = iterator();
-        ListNode finalNode = null;
-        while (iter.hasNext())
-        {
+        for (var i = 0; i < size(); ++i)
             iter.next();
-            finalNode = iter.last;
-        }
-        if (finalNode == null)
-        {
-            finalNode = new ListNode(e, null);
-            this.head = finalNode;
-            return true;
-        }
-        finalNode.next = new ListNode(e, null);
+        iter.add(e);
         return true;
     }
     @Override
