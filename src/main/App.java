@@ -10,7 +10,7 @@ public class App
         ll.add(3);
         ll.add(4);
         ll.add(5);
-        ll.add(1, 999);
+        ll.remove(9);
         System.out.println(ll);
     }
 }

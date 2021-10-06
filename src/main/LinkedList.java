@@ -71,6 +71,19 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         iter.add(e);
     }
     @Override
+    public TElement remove(int index)
+    {
+        if (index > size())
+            throw new IndexOutOfBoundsException("Max Index: " + (size()-1) + " Index: " + index);
+        var iter = iterator();
+        iter.next();
+        for (int i = 0; i < index; ++i)
+            iter.next();
+        var lastElement = iter.last.data;
+        iter.remove();
+        return lastElement;
+    }
+    @Override
     public LinkedListIterator iterator()
     {
         return new LinkedListIterator();
@@ -134,6 +147,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
             last = currentNode;
             var getnode = currentNode.data;
             currentNode = currentNode.next;
+            canRemove = true;
             ++index;
             return getnode;
         }
@@ -170,12 +184,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         @Override
         public void add(TElement e) {
             // If we are operating without a head
-            if (currentNode == null)
-            {
-                LinkedList.this.head = new ListNode(e, null);
-                return;
-            }
-            else if (currentNode == LinkedList.this.head)
+            if (currentNode == LinkedList.this.head)
             {
                 LinkedList.this.head = new ListNode(e, currentNode);
                 return;
