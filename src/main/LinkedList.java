@@ -8,7 +8,7 @@ import java.lang.UnsupportedOperationException;
 
 public class LinkedList<TElement> extends AbstractList<TElement>
 {
-    ListNode head;
+    ListNode head = null;
     LinkedList(ListNode head)
     {
         this.head = head;
@@ -69,6 +69,15 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         for (var i = 0; i < index; ++i)
             iter.next();
         iter.add(e);
+    }
+    @Override
+    public TElement set(int index, TElement element)
+    {
+        var iter = iterator();
+        for (var i = 0; i < index; ++i)
+            iter.next();
+        iter.set(element);
+        return element;
     }
     @Override
     public TElement remove(int index)
@@ -163,6 +172,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
                 throw new IllegalStateException("Cannot remove more than once per next call");
             canRemove = false;
             
+            // If we are operating on the head
             if (last == LinkedList.this.head)
             {
                 LinkedList.this.head = last.next;
