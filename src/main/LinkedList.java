@@ -75,6 +75,11 @@ public class LinkedList<TElement> extends AbstractList<TElement>
             ++s;
         return s;
     }
+    @Override
+    public boolean isEmpty()
+    {
+        return size() == 0;
+    }
     public String toString()
     {
         var sb = new StringBuilder();
@@ -162,11 +167,11 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     {
         ListNode currentNode = LinkedList.this.head;
         ListNode last = null;
+        ListNode lastlast = null;
         boolean canRemove = false;
         int index = 0;
         private LinkedListIterator()
         {
-            
         }
 
         @Override
@@ -178,6 +183,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         public TElement next() {
             if (!hasNext())
                 throw new NoSuchElementException();
+            lastlast = last;
             last = currentNode;
             var getnode = currentNode.data;
             currentNode = currentNode.next;
@@ -194,20 +200,24 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         @Override
         public void remove() {
             if (!canRemove)
-                throw new IllegalStateException("Cannot remove more than once per next call");
+                throw new IllegalStateException("Can only remove once after next() call");
             canRemove = false;
             
-            // If we are operating on the head
-            if (last == LinkedList.this.head)
+            // What we know:
+            // next() has been called once, so we know at least that next isnt null
+            // In the case lastlast is null, we've only called next() once
+            // If we only called next() once, we are operating on the head
+            if (lastlast == null)
             {
                 LinkedList.this.head = last.next;
+                last = lastlast;
             }
             else
             {
-                var behindLast = LinkedList.this.getNode(index-2);
-                behindLast.next = last.next;
-                last = behindLast;
-                currentNode = last.next;
+                // Sever the connection between the lastlast node and the last node
+                --index;
+                lastlast.next = last.next;
+                last = lastlast;
             }
         }
 
