@@ -46,6 +46,8 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     @Override
     public TElement set(int index, TElement element)
     {
+        if (index >= size())
+            throw new IndexOutOfBoundsException();
         var iter = iterator();
         for (var i = 0; i < index; ++i)
             iter.next();
@@ -229,7 +231,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         @Override
         public void add(TElement e) {
             // If we are operating without a head
-            if (currentNode == LinkedList.this.head)
+            if (last == null)
             {
                 LinkedList.this.head = new ListNode(e, currentNode);
                 return;
