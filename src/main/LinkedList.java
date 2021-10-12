@@ -22,7 +22,8 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         elements.forEach(x -> add(x));
     }
     @Override
-    public TElement get(int index) {
+    public TElement get(int index)
+    {
         var iter = (LinkedListIterator) listIterator(index);
         return iter.currentNode.data;
     }
@@ -71,8 +72,11 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         return new LinkedListIterator();
     }
     @Override
-    public int size() {
+    public int size()
+    {
         var s = 0;
+        // Every itteration is one index
+        // If I cannot use _ as a throwaway varable, WHAT AM I SUPPOSED TO USE!?!?!?!??!
         for (var i : this)
             ++s;
         return s;
@@ -80,7 +84,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     @Override
     public boolean isEmpty()
     {
-        return size() == 0;
+        return head == null;
     }
     public String toString()
     {
@@ -103,18 +107,8 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         head = null;
     }
     @Override
-    public int indexOf(Object o) {
-        var i = 0;
-        for (var e : this)
-        {
-            if (e.equals(o))
-                return i;
-            ++i;
-        }
-        return -1;
-    }
-    @Override
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(Object o)
+    {
         var i = 0;
         var obji = -1;
         for (var e : this)
@@ -126,11 +120,13 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         return obji;
     }
     @Override
-    public ListIterator<TElement> listIterator() {
+    public ListIterator<TElement> listIterator()
+    {
         return new LinkedListIterator();
     }
     @Override
-    public ListIterator<TElement> listIterator(int index) {
+    public ListIterator<TElement> listIterator(int index)
+    {
         var iter = iterator();
         for (int i = 0; i != index; ++i)
         {
@@ -141,7 +137,8 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         return iter;
     }
     @Override
-    protected void removeRange(int fromIndex, int toIndex) {
+    protected void removeRange(int fromIndex, int toIndex)
+    {
         if (toIndex > size())
             throw new IndexOutOfBoundsException();
         var iter = listIterator(fromIndex);
@@ -224,12 +221,14 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         }
 
         @Override
-        public void set(TElement e) {
+        public void set(TElement e) 
+        {
             currentNode.data = e;
         }
 
         @Override
-        public void add(TElement e) {
+        public void add(TElement e)
+        {
             // If we are operating without a head
             if (last == null)
             {
@@ -243,15 +242,18 @@ public class LinkedList<TElement> extends AbstractList<TElement>
         }
         // Going backwards in a linked list is an impossible task.
         @Override
-        public boolean hasPrevious() {
+        public boolean hasPrevious()
+        {
             throw new UnsupportedOperationException("LinkedList does not support moving backwards");
         }
         @Override
-        public TElement previous() {
+        public TElement previous()
+        {
             throw new UnsupportedOperationException("LinkedList does not support moving backwards");
         }
         @Override
-        public int previousIndex() {
+        public int previousIndex()
+        {
             throw new UnsupportedOperationException("LinkedList does not support moving backwards");
         }
     }
