@@ -86,21 +86,6 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     {
         return head == null;
     }
-    public String toString()
-    {
-        var sb = new StringBuilder();
-        var iter = iterator();
-        sb.append("[");
-        while (iter.hasNext())
-        {
-            var next = iter.next();
-            sb.append(next);
-            if (iter.hasNext())
-                sb.append(", ");
-        }
-        sb.append("]");
-        return sb.toString();
-    }
     @Override
     public void clear()
     {
