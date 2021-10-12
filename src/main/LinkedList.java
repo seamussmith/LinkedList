@@ -106,6 +106,7 @@ public class LinkedList<TElement> extends AbstractList<TElement>
     {
         head = null;
     }
+    // Default implementation uses backwards itteration, which is not supported.
     @Override
     public int lastIndexOf(Object o)
     {
